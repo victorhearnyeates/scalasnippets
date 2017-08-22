@@ -31,4 +31,14 @@ class ApplicativeFunctorsTest extends FunSuite with Matchers with ScalaFutures {
     val result: Future[Option[Int]] = fo.map2(f1, f2)(_ + _)
     result.futureValue.get should === (5)
   }
+
+  test("Applicative mapN") {
+
+    import cats.implicits._
+
+    val o1: Option[Int] = Some(1)
+    val o2: Option[Int] = Some(2)
+
+    (o1, o2).mapN(_ + _) should === (Option(3))
+  }
 }
