@@ -26,6 +26,10 @@ libraryDependencies ++= Seq(
   "com.github.julien-truffaut" %%  "monocle-core"  % "1.4.0",
   "com.github.kenbot" %% "goggles-macros" % "1.0",
   "com.github.kenbot" %% "goggles-dsl" % "1.0",
+  "com.lihaoyi" %% "fastparse" % "0.4.4",
+  "joda-time" % "joda-time" % "2.9.9",
+  "org.joda" % "joda-convert" % "1.8.3",
+  "com.github.nscala-time" % "nscala-time_2.12" % "2.16.0",
   "org.scalatest" %% "scalatest" % "3.0.1"
 )
 
