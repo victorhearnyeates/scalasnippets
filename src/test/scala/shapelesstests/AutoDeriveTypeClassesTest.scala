@@ -28,4 +28,16 @@ class AutoDeriveTypeClassesTest extends FunSuite with Matchers {
     val shapes: List[Shape] = List(Rectangle(3, 4), Circle(1))
     shapes.map(CsvEncoder[Shape].encode) should === (List(List("3", "4"), List("1")))
   }
+
+  test("Generic csv reader 1") {
+    val csv: List[String] = List("Vanilla", "99", "true")
+    val (_, result) = CsvReader[IceCream].read(csv)
+    result should contain (IceCream("Vanilla", 99, true))
+  }
+
+  test("Generic csv reader 2") {
+    val csv: List[String] = List("James", "Reddick", "45", "true")
+    val (_, result) = CsvReader[Registration].read(csv)
+    result should contain (Registration(PersonName("James", "Reddick"), 45, true))
+  }
 }
