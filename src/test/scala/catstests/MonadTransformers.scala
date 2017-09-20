@@ -44,4 +44,24 @@ class MonadTransformers extends FunSuite with Matchers with ScalaFutures {
     val resultFe: Future[Either[String, Int]] = result.value
     resultFe.futureValue should === (Right(6))
   }
+
+  test("EitherT and Higher Kinded Types") {
+
+    import cats._, cats.data._
+
+    def add[F[_]: Monad](v: F[Int]): F[Either[String, Int]] = {
+
+      val parseInt: Either[String, Int] = Try("1".toInt).toEither.left.map(_ => "Error")
+
+      val result: EitherT[F, String, Int] = for {
+        value <- EitherT.right[String](v)
+        one <- EitherT.fromEither[F](parseInt)
+        two <- EitherT.pure[F, String](2)
+      } yield value + one + two
+
+      result.value
+    }
+
+    add(3: Id[Int]) should === (Right(6))
+  }
 }
