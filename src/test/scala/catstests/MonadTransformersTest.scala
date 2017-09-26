@@ -6,8 +6,9 @@ import org.scalatest.concurrent.ScalaFutures
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.util.Try
+import language.higherKinds
 
-class MonadTransformers extends FunSuite with Matchers with ScalaFutures {
+class MonadTransformersTest extends FunSuite with Matchers with ScalaFutures {
 
   test("OptionT") {
 
