@@ -14,6 +14,8 @@ trait CsvReader[A] {
 
 object CsvReader {
 
+  def read[A](csv: List[String])(implicit reader: CsvReader[A]): Option[A] = reader.read(csv)._2
+
   def apply[A](implicit reader: CsvReader[A]): CsvReader[A] = reader
 
   implicit val stringReader: CsvReader[String] = csv => (csv.tail, csv.headOption)

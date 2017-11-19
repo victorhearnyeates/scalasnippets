@@ -31,13 +31,13 @@ class AutoDeriveTypeClassesTest extends FunSuite with Matchers {
 
   test("Generic csv reader 1") {
     val csv: List[String] = List("Vanilla", "99", "true")
-    val (_, result) = CsvReader[IceCream].read(csv)
+    val result = CsvReader.read[IceCream](csv)
     result should contain (IceCream("Vanilla", 99, true))
   }
 
   test("Generic csv reader 2") {
     val csv: List[String] = List("James", "Reddick", "45", "true")
-    val (_, result) = CsvReader[Registration].read(csv)
+    val result = CsvReader.read[Registration](csv)
     result should contain (Registration(PersonName("James", "Reddick"), 45, true))
   }
 }
