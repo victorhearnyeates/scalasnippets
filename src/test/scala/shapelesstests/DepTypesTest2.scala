@@ -4,25 +4,7 @@ import org.scalatest.{FunSuite, Matchers}
 import shapeless._
 import shapeless.ops.hlist.Tupler
 
-trait Foo[A] {
-  type B
-  def value: B
-}
-
-object Foo {
-
-  def foo[T](t: T)(implicit f: Foo[T]): f.B = f.value
-
-  implicit def fooInt = new Foo[Int] {
-    override type B = String
-    override def value = "Hey!"
-  }
-
-  implicit def fooString = new Foo[String] {
-    override type B = Boolean
-    override def value = true
-  }
-}
+case class IceCreamParlour(name: String, age: Int, iceCream: IceCream, active: Boolean)
 
 trait Projection[A] {
   type B
@@ -55,7 +37,7 @@ object Projection {
   implicit def hlistProjection[H, H0, T <: HList, T0 <: HList](
     implicit hProjection: Projection.Aux[H, H0],
     tProjection: Projection.Aux[T, T0]
-  ): Projection.Aux[H :: T, H0 :: T0] = new Projection[H :: T] {
+  ) = new Projection[H :: T] {
     type B = H0 :: T0
     def write(hlist: H :: T): H0 :: T0 = hProjection.write(hlist.head) :: tProjection.write(hlist.tail)
   }
@@ -74,16 +56,13 @@ class DepTypesTest2 extends FunSuite with Matchers {
 
   test("stuff") {
 
-    val a: String = Foo.foo(1) // "Hey!"
-    val b: Boolean = Foo.foo("qwe") // true
-
-    val y: String = Projection.write("abc")
-
     val iceCream: IceCream = IceCream("Sundae", 1, false)
-    val repr: String :: Int :: Boolean :: HNil = Generic[IceCream].to(iceCream)
 
     val x: (String, Int, String) = Projection.write(iceCream)
-    x should be (("Sundae", 1, "False"))
+    x should be (("Sundae", 1, "false"))
 
+//    val iceCreamParlour = IceCreamParlour("Rossis", 100, iceCream, true)
+//    val y = Projection.write(iceCreamParlour)
+//    y should be (("Rossis", 100, ("Sundae", 1, false), true))
   }
 }
