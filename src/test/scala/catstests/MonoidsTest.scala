@@ -2,6 +2,7 @@ package catstests
 
 import org.scalatest.{FunSuite, Matchers}
 import org.scalatest.concurrent.ScalaFutures
+
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.util.Try
@@ -33,5 +34,18 @@ class MonoidsTest extends FunSuite with Matchers with ScalaFutures {
 
     result1.futureValue should === (false)
     result2.futureValue should === (true)
+  }
+
+  test("Applicative Monoid") {
+
+    val f1: Future[Int] = Future.successful(2)
+    val f2: Future[Int] = Future.successful(5)
+    val f3: Future[Int] = f1 |+| f2
+
+    f3.futureValue should === (7)
+  }
+
+  test("Product Monoid") {
+    (1, 2) |+| (3, 4) should === ((4, 6))
   }
 }
