@@ -4,14 +4,16 @@ import org.scalatest.{FunSuite, Matchers}
 
 class MapHListTest extends FunSuite with Matchers {
 
+  case class Foo(name: String, age: Int, status: Boolean)
+  case class Bar(a: String, b: Int)
+  case class Baz(id: String, foo: Foo, bar: Bar)
+
   test("Tuple map") {
 
     import shapeless._
     import syntax.std.tuple._
     import cats.Show
     import cats.instances.all._
-
-    case class Foo(name: String, age: Int, status: Boolean)
 
     val james = Foo("James", 45, true)
 
@@ -33,5 +35,17 @@ class MapHListTest extends FunSuite with Matchers {
       "Age" -> "45",
       "Status" -> "true"
     ))
+  }
+
+  test("Flat map HList") {
+
+    import shapeless._
+
+    val foo = Foo("Foo", 99, true)
+    val bar = Bar("Bar", 66)
+    val baz = Baz("id", foo, bar)
+
+    val repr: String :: Foo :: Bar :: HNil = Generic[Baz].to(baz)
+
   }
 }
