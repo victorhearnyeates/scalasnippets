@@ -2,7 +2,7 @@ package shapelesstests
 
 import org.scalatest.{FunSuite, Matchers}
 import shapeless._
-import shapeless.ops.hlist.{FlatMapper, Tupler}
+import shapeless.ops.hlist.Tupler
 
 case class IceCreamParlour(name: String, age: Int, iceCream: IceCream, active: Boolean)
 

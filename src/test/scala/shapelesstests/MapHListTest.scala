@@ -36,16 +36,4 @@ class MapHListTest extends FunSuite with Matchers {
       "Status" -> "true"
     ))
   }
-
-  test("Flat map HList") {
-
-    import shapeless._
-
-    val foo = Foo("Foo", 99, true)
-    val bar = Bar("Bar", 66)
-    val baz = Baz("id", foo, bar)
-
-    val repr: String :: Foo :: Bar :: HNil = Generic[Baz].to(baz)
-
-  }
 }

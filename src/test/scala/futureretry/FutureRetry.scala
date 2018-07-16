@@ -63,7 +63,7 @@ object FutureRetry {
     op: A => Future[B \/ B],
     retryIntervals: Seq[FiniteDuration]
   )(a: A)(implicit ec: ExecutionContext, s: Scheduler): Future[B] = {
-    def noModification(a: A, b: B): A = a
+    val noModification: (A, B) => A = (aa, _) => aa
     retry(op, retryIntervals, noModification)(a)
   }
 

@@ -21,7 +21,7 @@ class FutureRetryTest extends FunSuite with Matchers with ScalaFutures {
   test("Retry function until it succeeds") {
     implicit val s = ActorSystem("retryTest").scheduler
     def failWhenLessThanFour(n: Int): Future[Int \/ Int] = Future.successful(if (n < 4) n.left else n.right)
-    def increment(n1: Int, n2: Int): Int = n1 + 1
+    val increment: (Int, Int) => Int = (n1, _) => n1 + 1
     val retryIntervals: List[FiniteDuration] = List.fill(10)(1.millisecond)
     FutureRetry.retry(failWhenLessThanFour, retryIntervals, increment)(1).futureValue should be (4)
   }
