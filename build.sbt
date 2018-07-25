@@ -31,6 +31,7 @@ scalacOptions in ThisBuild ++= Seq(
 
 libraryDependencies ++= Seq(
   "com.typesafe.akka" %% "akka-actor" % "2.5.7",
+  "com.typesafe.akka" %% "akka-stream" % "2.5.13",
   "org.scalaz" %% "scalaz-core" % "7.2.14",
   "org.typelevel" %% "cats-core" % "1.0.1",
   "com.chuusai" %% "shapeless" % "2.3.3",
