@@ -84,7 +84,7 @@ object ParentChild {
   val processor: Flow[DataToProcess, DataToProcess, NotUsed] = Flow.fromFunction(process)
 
   val completed: Flow[DataToProcess, DataToProcess, NotUsed] = {
-    Flow[DataToProcess].filter(d => Set[Status](Status.Success, Status.Failed).contains(d.status)).take(expectedElements)
+    Flow[DataToProcess].filter(d => Set[Status](Status.Success, Status.Failed).contains(d.status))
   }
 
   val retry: Flow[DataToProcess, DataToProcess, NotUsed] = Flow[DataToProcess].filter(_.status == Status.Retry)
