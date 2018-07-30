@@ -94,7 +94,7 @@ object ParentChild {
       import GraphDSL.Implicits._
       val broadcast = b.add(Broadcast[DataToProcess](2))
       val merge = b.add(MergePreferred[DataToProcess](1))
-      source ~> flatten ~> merge ~> processor ~> broadcast ~> completed ~> sink
+      source ~> flatten ~> merge ~> processor ~> broadcast ~> completed.take(expectedElements) ~> sink
       merge.preferred <~ retry <~ broadcast
       ClosedShape
     })
