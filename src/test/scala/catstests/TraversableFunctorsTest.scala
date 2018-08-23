@@ -18,12 +18,11 @@ class TraversableFunctorsTest extends FunSuite with Matchers with ScalaFutures {
   }
 
   def mapTraverse[F[_], G[_], A, B](fas: G[F[A]])(f: A => G[B])(implicit FT: Traverse[F], GM: Monad[G]): G[F[B]] =
-    fas.map(_.traverse(f)).flatten
+    fas.flatMap(_.traverse(f))
 
   def mapTraverseSequential[F[_], G[_], A, B](fas: G[F[A]])(f: A => G[B])(
     implicit FT: Traverse[F], FAP: Applicative[F], GM: Monad[G], FBMonoid: Monoid[F[B]]
-  ): G[F[B]] = fas.map(as => sequentialTraverse(as)(f)).flatten
-
+  ): G[F[B]] = fas.flatMap(as => sequentialTraverse(as)(f))
 
   test("mapTraverseSequential") {
 
