@@ -1,17 +1,18 @@
 package catstests
 
 import cats.data.State
-import cats.Traverse
+import cats._
 import cats.implicits._
-
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.{FunSuite, Matchers}
-
 import language.higherKinds
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 
 class TraversableFunctorsTest extends FunSuite with Matchers with ScalaFutures {
+
+  def mapTraverse[F[_], G[_], A, B](fas: G[F[A]])(f: A => G[B])(implicit FT: Traverse[F], GM: Monad[G]): G[F[B]] =
+    fas.map(_.traverse(f)).flatten
 
   test("traverse") {
 
