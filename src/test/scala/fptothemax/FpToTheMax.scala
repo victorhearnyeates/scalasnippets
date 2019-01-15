@@ -70,7 +70,7 @@ object FpToTheMax extends App {
       }
 
       case class WelcomeToGame(name: String) extends ConsoleOut {
-        def en = "Hello, " + name + ", welcome to the game!"
+        def en = "Hello, " + name + ", welcome to the game"
       }
 
     }
