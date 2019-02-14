@@ -33,7 +33,7 @@ libraryDependencies ++= Seq(
   "com.typesafe.akka" %% "akka-actor" % "2.5.7",
   "com.typesafe.akka" %% "akka-stream" % "2.5.13",
   "org.scalaz" %% "scalaz-core" % "7.2.14",
-  "org.typelevel" %% "cats-core" % "1.0.1",
+  "org.typelevel" %% "cats-core" % "1.6.0",
   "com.chuusai" %% "shapeless" % "2.3.3",
   "com.github.julien-truffaut" %%  "monocle-core"  % "1.5.0",
   "com.github.kenbot" %% "goggles-macros" % "1.0",
