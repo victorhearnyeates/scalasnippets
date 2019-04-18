@@ -2,7 +2,7 @@ name := "ScalaSnippets"
 
 version := "1.0"
 
-scalaVersion := "2.12.6"
+scalaVersion := "2.12.8"
 
 // https://tpolecat.github.io/2014/04/11/scalac-flags.html
 // http://blog.codacy.com/2016/08/04/make-scala-compiler-review-code/

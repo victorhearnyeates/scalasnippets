@@ -25,6 +25,15 @@ object Identity {
 
   type Aux[A0, B0] = Identity[A0] { type B = B0 }
 
+  import IdentitySyntax._
+
   def findById[A, ID](as: Seq[A], id: ID)(implicit identity: Identity.Aux[A, ID], equals: Eq[ID]): Option[A] =
-    as.find(a => identity.identity(a) === id)
+    as.find(_.id === id)
+}
+
+object IdentitySyntax {
+
+  implicit class IdentityOps[A](a: A) {
+    def id[ID](implicit identity: Identity.Aux[A, ID]): ID = identity.identity(a)
+  }
 }
