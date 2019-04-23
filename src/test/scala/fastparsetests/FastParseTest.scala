@@ -46,6 +46,26 @@ class FastParseTest extends FunSuite with Matchers with EitherValues {
     csv should === (Seq("a", "a", "a"))
   }
 
+  test("Multi line example") {
+
+    import NoWhitespace._
+
+    def prefix[_: P]: P[Unit] = P(CharsWhile(_ != '>'))
+    def alpha[_: P]: P[Unit] = P(CharIn("a-z").rep)
+    def get[_: P]: P[String] = P(">" ~ alpha.! ~ "<")
+    def parser[_: P]: P[Seq[String]] = P(prefix ~ get).rep
+
+    val data: String = Seq[String](
+      "a>bc<defg",
+      "abc>defg<",
+      ">abcdefg<",
+    ).mkString("\n")
+
+    val r: Parsed[Seq[String]] = parse(data, parser(_))
+    val Parsed.Success(result, _) = r
+    result should contain allOf ("bc", "defg", "abcdefg")
+  }
+
   test("Parse CSV1") {
 
     import NoWhitespace._
