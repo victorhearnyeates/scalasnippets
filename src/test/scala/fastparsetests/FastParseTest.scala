@@ -18,18 +18,22 @@ class FastParseTest extends FunSuite with Matchers with EitherValues {
 
     def startTag[_: P](name: String): P[Unit] = P("<" ~ name ~ (!">" ~ AnyChar).rep ~ ">")
     def endTag[_: P](name: String): P[Unit] = P("</" ~ name ~ ">")
-    def stringBetween[_: P](tag: String): P[String] = P(startTag(tag) ~ (!endTag(tag) ~ AnyChar).rep.! ~ endTag(tag))
+    def stringBetween[_: P](tag: String): P[String] = P(startTag(tag) ~ (!endTag(tag) ~ AnyChar).rep.! ~ endTag(tag)).map(_.trim)
+    def parseTag[_: P, A](tag: String, p: => P[A]): P[A] = P(startTag(tag) ~ p ~ (!endTag(tag) ~ AnyChar).rep ~ endTag(tag))
 
     def cell[_: P]: P[String] = P(stringBetween("td"))
     def cells[_: P]: P[Seq[String]] = P((!cell ~ AnyChar).rep ~ cell).rep
-    def row[_: P]: P[Seq[String]] = P(startTag("tr") ~ cells ~ endTag("tr"))
+
+    def row[_: P]: P[Seq[String]] = parseTag("tr", cells)
     def rows[_: P]: P[Seq[Seq[String]]] = P((!row ~ AnyChar).rep ~ row).rep
-    def table[_: P]: P[Seq[Seq[String]]] = P(startTag("table") ~ rows ~ endTag("table"))
+
+    def table[_: P]: P[Seq[Seq[String]]] = parseTag("table", rows)
     def tables[_: P]: P[Seq[Seq[Seq[String]]]] = P((!table ~ AnyChar).rep ~ table).rep
 
     parse("<td foo=bar>", startTag("td")(_)).isSuccess shouldBe true
     parse("<td foo=bar>foo bar</td>", stringBetween("td")(_)).get.value shouldEqual "foo bar"
     parse(Data.cells, cells(_)).get.value shouldEqual Seq("1", "2", "3", "4")
+    parse(Data.rows, rows(_)).get.value shouldEqual Seq(Seq("1"), Seq("2"), Seq("3"))
 
     val getTables: Seq[Seq[Seq[String]]] = parse(Data.html, tables(_)).get.value
     getTables should not be empty
