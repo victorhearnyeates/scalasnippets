@@ -30,6 +30,9 @@ scalacOptions in ThisBuild ++= Seq(
 )
 
 libraryDependencies ++= Seq(
+  "org.apache.commons" % "commons-lang3" % "3.9",
+  "org.apache.commons" % "commons-text" % "1.7",
+  "org.apache.commons" % "commons-rng-simple" % "1.2",
   "com.typesafe.akka" %% "akka-actor" % "2.5.7",
   "com.typesafe.akka" %% "akka-stream" % "2.5.13",
   "org.scalaz" %% "scalaz-core" % "7.2.14",
