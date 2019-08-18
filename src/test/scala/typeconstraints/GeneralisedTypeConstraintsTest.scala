@@ -1,5 +1,6 @@
 package typeconstraints
 
+import scala.collection.immutable.Seq
 import org.scalatest.{FunSuite, Matchers}
 
 class GeneralisedTypeConstraintsTest extends FunSuite with Matchers {

@@ -2,6 +2,7 @@ package akkastreams
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
+import scala.collection.immutable.Seq
 
 import akka.NotUsed
 import akka.actor.ActorSystem

@@ -10,9 +10,9 @@ class StateMonadTest extends FunSuite with Matchers {
   case class Baz(ss: String)
 
   object FooBar {
-    val sLens = lens[FooBar] >> 's
-    val iLens = lens[FooBar] >> 'i
-    val ssLens = lens[FooBar] >> 'b >> 'ss
+    val sLens = lens[FooBar] >> Symbol("s")
+    val iLens = lens[FooBar] >> Symbol("i")
+    val ssLens = lens[FooBar] >> Symbol("b") >> Symbol("ss")
   }
 
   object Stack {

@@ -1,5 +1,7 @@
-package fastparsetests
+//package fastparsetests
 
+/*
+import scala.collection.immutable.Seq
 import org.joda.time.DateTime
 import org.scalatest.{EitherValues, FunSuite, Matchers}
 
@@ -109,3 +111,4 @@ class FastParseTest extends FunSuite with Matchers with EitherValues {
     result2.left.value shouldEqual "Error reading data"
   }
 }
+*/

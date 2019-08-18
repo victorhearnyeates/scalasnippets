@@ -1,5 +1,6 @@
 package identitytypeclass
 
+import scala.collection.immutable.Seq
 import cats._
 import cats.implicits._
 

@@ -5,7 +5,6 @@ import cats._
 import cats.implicits._
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.{FunSuite, Matchers}
-import language.higherKinds
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 

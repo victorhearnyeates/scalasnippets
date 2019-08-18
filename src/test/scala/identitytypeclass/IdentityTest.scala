@@ -1,5 +1,6 @@
 package identitytypeclass
 
+import scala.collection.immutable.Seq
 import org.scalatest.{FunSuite, Matchers}
 import cats.implicits._
 
