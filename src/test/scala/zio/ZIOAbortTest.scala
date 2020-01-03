@@ -70,7 +70,7 @@ object TaskUtils {
 
   private def abortTask(config: AbortConfig): URIO[Clock, Unit] = {
     val retry = zio.duration.Duration.fromScala(config.repeatDuration)
-    val schedule = ZSchedule.spaced(retry)
+    val schedule = Schedule.spaced(retry)
     def run: Unit = if (config.doAbort()) config.abort() else ()
     UIO(run).repeat(schedule).map(_ => ())
   }
