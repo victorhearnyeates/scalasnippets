@@ -30,6 +30,7 @@ scalacOptions in ThisBuild ++= Seq(
 libraryDependencies ++= Seq(
   "org.apache.commons" % "commons-lang3" % "3.9",
   "org.apache.commons" % "commons-text" % "1.8",
+  "commons-io" % "commons-io" % "2.6",
   "org.apache.commons" % "commons-rng-simple" % "1.3",
   "com.typesafe.akka" %% "akka-actor" % "2.6.1",
   "com.typesafe.akka" %% "akka-stream" % "2.6.1",
@@ -41,5 +42,8 @@ libraryDependencies ++= Seq(
   "com.github.julien-truffaut" %%  "monocle-core"  % "1.6.0",
   "com.lihaoyi" %% "fastparse" % "2.2.3",
   "joda-time" % "joda-time" % "2.10.5",
+  "com.softwaremill.sttp.client" %% "core" % "2.0.0-RC6",
+  "com.softwaremill.sttp.client" %% "async-http-client-backend-zio" % "2.0.0-RC6",
+  "com.softwaremill.sttp.client" %% "async-http-client-backend-zio-streams" % "2.0.0-RC6",
   "org.scalatest" %% "scalatest" % "3.0.8"
 )
