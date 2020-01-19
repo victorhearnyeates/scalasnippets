@@ -6,7 +6,7 @@ import scala.concurrent.duration._
 import akka.NotUsed
 import akka.actor.ActorSystem
 import akka.stream.scaladsl.{Flow, Keep, RunnableGraph, Sink, Source}
-import akka.stream.{ActorMaterializer, KillSwitches, SharedKillSwitch}
+import akka.stream.{KillSwitches, SharedKillSwitch}
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.{FunSuite, Matchers}
 import zio.TaskUtils._
@@ -34,9 +34,6 @@ class ZIOAbortTest extends FunSuite with Matchers with ScalaFutures {
   }
 
   test("Running an Akka stream with abort") {
-
-    implicit val system: ActorSystem = ActorSystem("SumIntegers")
-    implicit val materializer: ActorMaterializer = ActorMaterializer()
 
     val program = new MyAkkaStreamProgram(5)
 
@@ -104,8 +101,9 @@ object ZIOAbortTest {
     }
   }
 
-  class MyAkkaStreamProgram(abortIteration: Int)(implicit m: ActorMaterializer) {
+  class MyAkkaStreamProgram(abortIteration: Int) {
 
+    private implicit val system = ActorSystem("SumIntegers")
     private var iteration: Int = 0
     private val killSwitch: SharedKillSwitch = KillSwitches.shared("my-kill-switch")
     private val source: Source[Int, NotUsed] = Source(1 to 10).throttle(1, 1.second)

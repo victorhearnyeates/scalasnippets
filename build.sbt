@@ -2,7 +2,7 @@ name := "ScalaSnippets"
 
 version := "1.0"
 
-scalaVersion := "2.13.0"
+scalaVersion := "2.13.1"
 
 // https://tpolecat.github.io/2014/04/11/scalac-flags.html
 // http://blog.codacy.com/2016/08/04/make-scala-compiler-review-code/
@@ -29,17 +29,17 @@ scalacOptions in ThisBuild ++= Seq(
 
 libraryDependencies ++= Seq(
   "org.apache.commons" % "commons-lang3" % "3.9",
-  "org.apache.commons" % "commons-text" % "1.7",
-  "org.apache.commons" % "commons-rng-simple" % "1.2",
-  "com.typesafe.akka" %% "akka-actor" % "2.5.24",
-  "com.typesafe.akka" %% "akka-stream" % "2.5.24",
-  "org.typelevel" %% "cats-core" % "2.0.0",
+  "org.apache.commons" % "commons-text" % "1.8",
+  "org.apache.commons" % "commons-rng-simple" % "1.3",
+  "com.typesafe.akka" %% "akka-actor" % "2.6.1",
+  "com.typesafe.akka" %% "akka-stream" % "2.6.1",
+  "org.typelevel" %% "cats-core" % "2.1.0",
   "org.typelevel" %% "cats-effect" % "2.0.0",
   "dev.zio" %% "zio" % "1.0.0-RC17",
-  "dev.zio" %% "zio-interop-cats" % "2.0.0.0-RC7",
+  "dev.zio" %% "zio-interop-cats" % "2.0.0.0-RC10",
   "com.chuusai" %% "shapeless" % "2.3.3",
   "com.github.julien-truffaut" %%  "monocle-core"  % "1.6.0",
-  "com.lihaoyi" %% "fastparse" % "2.1.3",
-  "joda-time" % "joda-time" % "2.10.3",
+  "com.lihaoyi" %% "fastparse" % "2.2.3",
+  "joda-time" % "joda-time" % "2.10.5",
   "org.scalatest" %% "scalatest" % "3.0.8"
 )

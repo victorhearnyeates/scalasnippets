@@ -1,13 +1,13 @@
 package akkastreams
 
+import scala.collection.immutable.Seq
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-import scala.collection.immutable.Seq
 
 import akka.NotUsed
 import akka.actor.ActorSystem
+import akka.stream.ClosedShape
 import akka.stream.scaladsl.{Broadcast, Flow, GraphDSL, MergePreferred, RunnableGraph, Sink, Source}
-import akka.stream.{ActorMaterializer, ClosedShape}
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.time.{Seconds, Span}
 import org.scalatest.{FunSuite, Matchers}
@@ -45,7 +45,6 @@ object ParentChild {
 
   def run[A](runnable: RunnableGraph[Future[A]]): Future[A] = {
     implicit val system: ActorSystem = ActorSystem("ParentChild")
-    implicit val materializer: ActorMaterializer = ActorMaterializer()
     val result: Future[A] = runnable.run()
     result.onComplete(_ => system.terminate())
     result
