@@ -7,16 +7,15 @@ class ZIOStreamTest extends FunSuite with Matchers {
 
   val runtime = new DefaultRuntime {}
 
+  def addOne(i: Int): UIO[Int] = ZIO.succeed {
+    Thread.sleep(i * 500)
+    println(s"$i + 1")
+    i + 1
+  }
+
   test("mapMPar - mapping over elements and executing N concurrently") {
 
     var output: List[Int] = Nil
-
-    def addOne(i: Int): UIO[Int] = ZIO.succeed {
-      Thread.sleep(i * 500)
-      println(s"$i + 1")
-      i + 1
-    }
-
     def write(i: Int): UIO[Unit] = ZIO.succeed((output = output :+ i))
 
     val ints: List[Int] = List(4, 3, 2, 1)
