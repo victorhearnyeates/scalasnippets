@@ -22,13 +22,10 @@ object ZIOFolding {
       acc.zipWithPar(f(nxt))(_ |+| _)
     }
 
-  def batched[A, B: Monoid](as: List[A], f: A => Task[B], batchSize: Int, maxSize: Int): Task[List[B]] = {
-    Foldable[List].foldLeftM[Task, List[A], List[B]](as.grouped(batchSize).toList, Nil) { case (acc, nxt) =>
-      if (acc.size > maxSize) Task.effectTotal(acc) else {
-        foldMapMPar[A, B](nxt, f).map(_ :: acc)
-      }
+  def foldMapMParNUntil[A, B: Monoid](as: List[A], f: A => Task[B], batchSize: Int, until: B => Boolean): Task[B] =
+    Foldable[List].foldLeftM[Task, List[A], B](as.grouped(batchSize).toList, Monoid[B].empty) { case (acc, nxt) =>
+      if (until(acc)) Task.effectTotal(acc) else foldMapMPar[A, B](nxt, f).map(_ |+| acc)
     }
-  }
 
   def foldMapMUntil[F[_]: Monad, A, B: Monoid](as: List[A], f: A => F[B], until: B => Boolean): F[B] =
     Foldable[List].foldLeftM[F, A, B](as, Monoid[B].empty) { case (acc, nxt) =>
