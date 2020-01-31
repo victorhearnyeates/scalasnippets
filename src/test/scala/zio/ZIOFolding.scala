@@ -9,9 +9,9 @@ import ZIOFolding._
 class ZIOFolding extends FunSuite with Matchers {
 
   test("foldMapMUntil") {
-    foldMapMUntil[Id, Int, Int](List(1, 2, 3, 4, 5), identity[Int], _ > 2) shouldEqual 3
-    foldMapMUntil[Id, Int, Int](List(1, 2, 3, 4, 5), identity[Int], _ > 4) shouldEqual 6
-    foldMapMUntil[Id, Int, Int](List(1, 2, 3, 4, 5), identity[Int], _ > 8) shouldEqual 10
+    foldMapMUntil[Id, Int, Int](List(1, 2, 3, 4, 5), identity, _ > 2) shouldEqual 3
+    foldMapMUntil[Id, Int, Int](List(1, 2, 3, 4, 5), identity, _ > 4) shouldEqual 6
+    foldMapMUntil[Id, Int, Int](List(1, 2, 3, 4, 5), identity, _ > 8) shouldEqual 10
   }
 }
 
