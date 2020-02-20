@@ -31,6 +31,7 @@ libraryDependencies ++= Seq(
   "org.apache.commons" % "commons-lang3" % "3.9",
   "org.apache.commons" % "commons-text" % "1.8",
   "commons-io" % "commons-io" % "2.6",
+  "com.typesafe.play" %% "play-json" % "2.8.1",
   "org.apache.commons" % "commons-rng-simple" % "1.3",
   "com.typesafe.akka" %% "akka-actor" % "2.6.1",
   "com.typesafe.akka" %% "akka-stream" % "2.6.1",

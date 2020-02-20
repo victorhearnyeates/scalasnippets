@@ -5,6 +5,7 @@ import scala.concurrent.Future
 import scala.concurrent.duration._
 
 import org.scalatest.{FunSuite, Matchers}
+import zio.clock.Clock
 
 class ZIORetryTest extends FunSuite with Matchers {
 
@@ -12,7 +13,7 @@ class ZIORetryTest extends FunSuite with Matchers {
 
   val runtime = new DefaultRuntime {}
 
-  test("stuff") {
+  test("Task retry test") {
 
     def run: Unit = {
       val id = UUID.randomUUID().toString
@@ -21,8 +22,9 @@ class ZIORetryTest extends FunSuite with Matchers {
       println(s"Finished #$id")
     }
 
-    def task: Task[Unit] = Task.fromFuture{ implicit ec => Future(run) }
-    runtime.unsafeRun(retryTaskWithTimeout(task, 2.seconds, 3))
+    def task: UIO[Option[Throwable]] = Task.fromFuture{ implicit ec => Future(run) }.either.map(_.swap.toOption)
+    val result: Option[Throwable] = runtime.unsafeRun(retryTaskWithTimeout(task, 2.seconds, 3))
+    result should not be empty
   }
 }
 
@@ -32,7 +34,7 @@ object ZIORetryTest {
     task: Task[A],
     timeout: Duration,
     retryCount: Int
-  ) = {
+  ): ZIO[Clock, Throwable, A] = {
     def timeoutError: Throwable = new RuntimeException("Task timed out")
     val retrySchedule = Schedule.spaced(zio.duration.Duration.fromScala(1.second)).whileOutput(_ < retryCount - 1)
     val timeoutDuration = zio.duration.Duration.fromScala(timeout)
