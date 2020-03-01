@@ -30,4 +30,13 @@ class ZIOStreamTest extends FunSuite with Matchers {
     println(duration)
     output should not be empty
   }
+
+  test("flatMap") {
+
+    val s1: Stream[Nothing, Int] = ZStream(1, 2, 3)
+    val s2: Stream[Nothing, Int] = ZStream(4)
+    val s: Stream[Nothing, Int] = s2.flatMap(_ => s1)
+    val t: UIO[List[Int]] = s.run(Sink.collectAll[Int])
+    runtime.unsafeRun(t) shouldEqual List(1, 2, 3, 4)
+  }
 }

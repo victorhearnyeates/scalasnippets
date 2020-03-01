@@ -35,6 +35,8 @@ libraryDependencies ++= Seq(
   "org.apache.commons" % "commons-rng-simple" % "1.3",
   "com.typesafe.akka" %% "akka-actor" % "2.6.1",
   "com.typesafe.akka" %% "akka-stream" % "2.6.1",
+  "com.typesafe.akka" %% "akka-testkit" % "2.6.1",
+  "com.typesafe.akka" %% "akka-stream-testkit" % "2.6.1",
   "org.typelevel" %% "cats-core" % "2.1.0",
   "org.typelevel" %% "cats-effect" % "2.0.0",
   "dev.zio" %% "zio" % "1.0.0-RC17",
