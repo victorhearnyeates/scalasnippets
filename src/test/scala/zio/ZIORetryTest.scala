@@ -13,7 +13,7 @@ class ZIORetryTest extends FunSuite with Matchers {
 
   val runtime = new DefaultRuntime {}
 
-  test("Task retry test") {
+  ignore("Task retry test") {
 
     def run: Unit = {
       val id = UUID.randomUUID().toString

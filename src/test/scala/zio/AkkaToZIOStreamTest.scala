@@ -61,7 +61,7 @@ class AkkaToZIOStreamTest extends FunSuite with Matchers {
   test("ZIO Stream to Akka Sink") {
     val akkaSink = AkkaSink.seq[Int]
     val zStream: Stream[Throwable, Int] = ZStream.fromIterable(numbers)
-    val task: Task[Seq[Int]] = zStream.writeToAkkaSinkWithOnMaterialization(akkaSink, identity[Seq[Int]])
+    val task: Task[Seq[Int]] = zStream.writeToAkkaSink(akkaSink)
     runtime.unsafeRun(task) shouldEqual numbers
   }
 
@@ -69,7 +69,7 @@ class AkkaToZIOStreamTest extends FunSuite with Matchers {
     val akkaSink = AkkaSink.seq[Int]
     val error = new RuntimeException("Boom")
     val zStream: Stream[Throwable, Int] = ZStream.fail(error)
-    val task: Task[Unit] = zStream.writeToAkkaSink(akkaSink)
+    val task: Task[Unit] = zStream.writeToAkkaSink(akkaSink).unit
     val run: IO[Boolean, Boolean] = task.either.collect(false) { case Left(e) if e == error => true }
     runtime.unsafeRun(run) shouldBe true
   }
@@ -78,7 +78,7 @@ class AkkaToZIOStreamTest extends FunSuite with Matchers {
     val akkaSink = AkkaSink.seq[Int]
     val error = new RuntimeException("Boom")
     val zStream: Stream[Throwable, Int] = Stream.fromEffect(Task.fail(error))
-    val task: Task[Unit] = zStream.writeToAkkaSink(akkaSink)
+    val task: Task[Unit] = zStream.writeToAkkaSink(akkaSink).unit
     val run: IO[Boolean, Boolean] = task.either.collect(false) { case Left(e) if e == error => true }
     runtime.unsafeRun(run) shouldBe true
   }
@@ -87,14 +87,14 @@ class AkkaToZIOStreamTest extends FunSuite with Matchers {
     val error = new RuntimeException("Boom")
     val akkaSink = AkkaSink.foreach[Int](_ => throw error)
     val zStream: Stream[Throwable, Int] = ZStream.fromIterable(numbers)
-    val task: Task[Unit] = zStream.writeToAkkaSink(akkaSink)
+    val task: Task[Unit] = zStream.writeToAkkaSink(akkaSink).unit
     runtime.unsafeRunSync(task).succeeded shouldBe false
   }
 
   test("ZIO Stream to Akka Sink propagates early termination") {
     val akkaSink = AkkaFlow[Int].take(3).toMat(AkkaSink.seq)(Keep.right)
     val zStream: Stream[Throwable, Int] = ZStream.fromIterable(numbers)
-    val task: Task[Seq[Int]] = zStream.writeToAkkaSinkWithOnMaterialization(akkaSink, identity[Seq[Int]])
+    val task: Task[Seq[Int]] = zStream.writeToAkkaSink(akkaSink)
     runtime.unsafeRun(task) shouldEqual numbers.take(3)
   }
 }

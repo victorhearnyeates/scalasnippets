@@ -20,7 +20,7 @@ class SttpTest extends FunSuite with Matchers with EitherValues {
   implicit val sttpBackend = runtime.unsafeRun(AsyncHttpClientZioBackend())
   implicit val sttpBackend2 = runtime.unsafeRun(AsyncHttpClientZioStreamsBackend(runtime))
 
-  test("stuff") {
+  ignore("stuff") {
 
     val file = new File("/Users/jreddick/tmp/test.jpg")
 

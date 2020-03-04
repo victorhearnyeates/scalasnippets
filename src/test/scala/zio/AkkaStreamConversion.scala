@@ -15,17 +15,8 @@ trait AkkaStreamConversionSyntax {
   }
 
   implicit class ZIOStreamOps[A](stream: Stream[Throwable, A]) {
-
-    def writeToAkkaSink[M](
-      sink: Graph[SinkShape[A], Future[M]]
-    )(implicit materializer: Materializer): Task[Unit] =
-      AkkaStreamConversion.writeToAkkaSink(stream, sink, (_: M) => ())
-
-    def writeToAkkaSinkWithOnMaterialization[M, B](
-      sink: Graph[SinkShape[A], Future[M]],
-      onMaterialization: M => B
-    )(implicit materializer: Materializer): Task[B] =
-      AkkaStreamConversion.writeToAkkaSink(stream, sink, onMaterialization)
+    def writeToAkkaSink[M](sink: Graph[SinkShape[A], Future[M]])(implicit materializer: Materializer): Task[M] =
+      AkkaStreamConversion.writeToAkkaSink(stream, sink)
   }
 }
 
@@ -47,13 +38,12 @@ object AkkaStreamConversion {
     ZStream.fromEffect(createStream).flatMap(identity)
   }
 
-  def writeToAkkaSink[A, M, B](
+  def writeToAkkaSink[A, M](
     stream: Stream[Throwable, A],
-    sink: Graph[SinkShape[A], Future[M]],
-    onMaterialization: M => B
-  )(implicit materializer: Materializer): Task[B] = Task.effectSuspend {
+    sink: Graph[SinkShape[A], Future[M]]
+  )(implicit materializer: Materializer): Task[M] = Task.effectSuspend {
     val (publisher, mat) = AkkaSource.queue[A](0, OverflowStrategy.backpressure).toMat(sink)(Keep.both).run()
-    publisherStream[A](publisher, stream) *> Task.fromFuture(_ => mat).map(onMaterialization)
+    publisherStream[A](publisher, stream) *> Task.fromFuture(_ => mat)
   }
 
   private def subscriberStream[A](subscriber: SinkQueueWithCancel[A]): Stream[Throwable, A] = {
