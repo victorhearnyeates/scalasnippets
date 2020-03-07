@@ -12,11 +12,12 @@ import akka.testkit.TestProbe
 import org.scalatest.{FunSuite, Matchers}
 import zio.AkkaStreamConversion._
 import zio.AkkaStreamConversionSyntax._
+import zio.internal.Platform
 import zio.stream._
 
 class AkkaToZIOStreamTest extends FunSuite with Matchers {
 
-  val runtime = new DefaultRuntime {}
+  val runtime = Runtime.unsafeFromLayer(ZEnv.live, Platform.default)
   implicit val system: ActorSystem = ActorSystem("AkkaToZIOStreamTest")
   val numbers: List[Int] = (1 to 10).toList
 

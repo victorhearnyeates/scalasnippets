@@ -10,15 +10,16 @@ import sttp.client._
 import sttp.client.asynchttpclient.zio.AsyncHttpClientZioBackend
 import sttp.client.asynchttpclient.ziostreams.AsyncHttpClientZioStreamsBackend
 import zio._
+import zio.internal.Platform
 import zio.stream.Stream
 
 class SttpTest extends FunSuite with Matchers with EitherValues {
 
   // https://github.com/loicdescotte/scalaIO-streaming-examples/blob/master/src/main/scala/zio/ZioCirce.scala
 
-  val runtime = new DefaultRuntime {}
+  val runtime = Runtime.unsafeFromLayer(ZEnv.live, Platform.default)
   implicit val sttpBackend = runtime.unsafeRun(AsyncHttpClientZioBackend())
-  implicit val sttpBackend2 = runtime.unsafeRun(AsyncHttpClientZioStreamsBackend(runtime))
+  implicit val sttpBackend2 = runtime.unsafeRun(AsyncHttpClientZioStreamsBackend())
 
   ignore("stuff") {
 

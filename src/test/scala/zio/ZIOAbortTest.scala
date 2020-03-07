@@ -12,11 +12,12 @@ import org.scalatest.{FunSuite, Matchers}
 import zio.TaskUtils._
 import zio.ZIOAbortTest._
 import zio.clock.Clock
+import zio.internal.Platform
 
 class ZIOAbortTest extends FunSuite with Matchers with ScalaFutures {
 
   implicit override val patienceConfig: PatienceConfig = PatienceConfig(timeout = 20.seconds, interval = 200.millis)
-  private val runtime = new DefaultRuntime {}
+  val runtime = Runtime.unsafeFromLayer(ZEnv.live, Platform.default)
 
   test("Running a program with abort") {
 

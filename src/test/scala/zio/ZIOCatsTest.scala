@@ -2,11 +2,12 @@ package zio
 
 import cats.implicits._
 import org.scalatest.{FunSuite, Matchers}
+import zio.internal.Platform
 import zio.interop.catz._
 
 class ZIOCatsTest extends FunSuite with Matchers {
 
-  val runtime = new DefaultRuntime {}
+  val runtime = Runtime.unsafeFromLayer(ZEnv.live, Platform.default)
 
   test("Traverse") {
     def task(i: Int): Task[Int] = Task.succeed(i)

@@ -1,11 +1,12 @@
 package zio
 
 import org.scalatest.{FunSuite, Matchers}
+import zio.internal.Platform
 import zio.stream._
 
 class ZIOStreamTest extends FunSuite with Matchers {
 
-  val runtime = new DefaultRuntime {}
+  val runtime = Runtime.unsafeFromLayer(ZEnv.live, Platform.default)
 
   def addOne(i: Int): UIO[Int] = ZIO.succeed {
     Thread.sleep(i * 500)

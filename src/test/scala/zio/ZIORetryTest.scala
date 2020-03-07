@@ -6,12 +6,13 @@ import scala.concurrent.duration._
 
 import org.scalatest.{FunSuite, Matchers}
 import zio.clock.Clock
+import zio.internal.Platform
 
 class ZIORetryTest extends FunSuite with Matchers {
 
   import ZIORetryTest._
 
-  val runtime = new DefaultRuntime {}
+  val runtime = Runtime.unsafeFromLayer(ZEnv.live, Platform.default)
 
   ignore("Task retry test") {
 
