@@ -43,10 +43,12 @@ libraryDependencies ++= Seq(
   "dev.zio" %% "zio-interop-cats" % "2.0.0.0-RC11",
   "com.chuusai" %% "shapeless" % "2.3.3",
   "com.github.julien-truffaut" %%  "monocle-core"  % "2.0.4",
+  "com.github.julien-truffaut" %%  "monocle-macro" % "2.0.4",
   "com.lihaoyi" %% "fastparse" % "2.2.4",
   "joda-time" % "joda-time" % "2.10.5",
   "com.softwaremill.sttp.client" %% "core" % "2.0.3",
   "com.softwaremill.sttp.client" %% "async-http-client-backend-zio" % "2.0.3",
   "com.softwaremill.sttp.client" %% "async-http-client-backend-zio-streams" % "2.0.3",
+  "com.softwaremill.quicklens" %% "quicklens" % "1.4.12",
   "org.scalatest" %% "scalatest" % "3.0.8"
 )

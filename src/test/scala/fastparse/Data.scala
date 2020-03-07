@@ -1,4 +1,4 @@
-package fastparsetests
+package fastparse
 
 object Data {
 
