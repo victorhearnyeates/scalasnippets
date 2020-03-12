@@ -24,9 +24,9 @@ class RateLimiterTest extends FunSuite with Matchers with ScalaFutures {
       System.currentTimeMillis() -> i
     }
 
-    def rateLimited(i: Int): Task[(Long, Int)] = {
+    def rateLimited(highPriority: Boolean)(i: Int): Task[(Long, Int)] = {
       println(s"Calling function with: $i")
-      rateLimiter.rateLimit(Task.succeed(runInt(i)))
+      rateLimiter.rateLimit(Task.succeed(runInt(i)), highPriority)
     }
 
     def isEven(i: Int): Boolean = i % 2 == 0
@@ -34,10 +34,10 @@ class RateLimiterTest extends FunSuite with Matchers with ScalaFutures {
     val numbers: List[Int] = (1 to 10).toList
 
     val evenStream: Stream[Throwable, (Long, Int)] =
-      Stream.fromIterable(numbers).filter(isEven).mapMPar(3)(rateLimited)
+      Stream.fromIterable(numbers).filter(isEven).mapMPar(3)(rateLimited(true))
 
     val oddStream: Stream[Throwable, (Long, Int)] =
-      Stream.fromIterable(numbers).filter(!isEven(_)).mapMPar(3)(rateLimited)
+      Stream.fromIterable(numbers).filter(!isEven(_)).mapMPar(3)(rateLimited(false))
 
     val task: Task[List[(Long, Int)]] = ZIO
       .collectAllPar(List(oddStream.runCollect, evenStream.runCollect))
