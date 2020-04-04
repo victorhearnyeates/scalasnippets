@@ -1,5 +1,6 @@
 package zio
 
+import scala.annotation.tailrec
 import scala.concurrent.duration._
 
 import cats.implicits._
@@ -12,7 +13,7 @@ class RateLimiterTest extends FunSuite with Matchers with ScalaFutures {
 
   implicit override val patienceConfig: PatienceConfig = PatienceConfig(timeout = 60.seconds, interval = 500.millis)
 
-  val runtime = Runtime.unsafeFromLayer(ZEnv.live, Platform.default)
+  val runtime = Runtime.unsafeFromLayer(ZEnv.live)
   val rateLimiter: RateLimiter3 = runtime.unsafeRun(RateLimiter3.create)
 
   test("Test rate limited stuff") {
@@ -44,6 +45,22 @@ class RateLimiterTest extends FunSuite with Matchers with ScalaFutures {
       .map(_.flatten.sortBy(_._1))
 
     val result: List[(Long, Int)] = runtime.unsafeRun(task)
-    println(result)
+    println(normaliseTime(result))
+  }
+
+  def normaliseTime(r: List[(Long, Int)]): List[(Long, Int)] = {
+
+    @tailrec
+    def run(
+      remaining: List[(Long, Int)],
+      prev: Option[(Long, Int)],
+      acc: List[(Long, Int)]
+    ): List[(Long, Int)] = (remaining, prev) match {
+      case (Nil, _) => acc
+      case ((t, i) :: tail, None) => run(tail, Some((t, i)), acc :+ (0, i))
+      case ((t2, i2) :: tail, Some((t1, _))) => run(tail, Some((t2, i2)), acc :+ (t2 - t1, i2))
+    }
+
+    run(r, None, Nil)
   }
 }
