@@ -6,7 +6,6 @@ import scala.concurrent.duration._
 import cats.implicits._
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.{FunSuite, Matchers}
-import zio.internal.Platform
 import zio.stream._
 
 class RateLimiterTest extends FunSuite with Matchers with ScalaFutures {
