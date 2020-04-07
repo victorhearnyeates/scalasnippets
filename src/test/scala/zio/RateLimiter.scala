@@ -9,7 +9,7 @@ object RateLimiter {
 }
 
 class RateLimiter private(semaphore: Semaphore) {
-  def rateLimit[A](task: Task[A]): Task[A] = semaphore.withPermit(task)
+  def rateLimit[R, E, A](task: ZIO[R, E, A]): ZIO[R, E, A] = semaphore.withPermit(task)
 }
 
 object RateLimiter2 {

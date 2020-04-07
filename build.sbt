@@ -40,6 +40,8 @@ libraryDependencies ++= Seq(
   "org.typelevel" %% "cats-core" % "2.1.1",
   "org.typelevel" %% "cats-effect" % "2.1.2",
   "dev.zio" %% "zio" % "1.0.0-RC18-2",
+  "dev.zio" %% "zio-test" % "1.0.0-RC18-2",
+  "dev.zio" %% "zio-test-sbt" % "1.0.0-RC18-2",
   "dev.zio" %% "zio-interop-cats" % "2.0.0.0-RC11",
   "com.chuusai" %% "shapeless" % "2.3.3",
   "com.github.julien-truffaut" %%  "monocle-core"  % "2.0.4",
@@ -52,3 +54,5 @@ libraryDependencies ++= Seq(
   "com.softwaremill.quicklens" %% "quicklens" % "1.5.0",
   "org.scalatest" %% "scalatest" % "3.0.8"
 )
+
+testFrameworks += new TestFramework("zio.test.sbt.ZTestFramework")

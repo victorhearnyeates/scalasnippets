@@ -6,6 +6,8 @@ import scala.concurrent.duration._
 import cats.implicits._
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.{FunSuite, Matchers}
+import zio.clock.Clock
+import zio.duration.Duration
 import zio.stream._
 
 class RateLimiterTest extends FunSuite with Matchers with ScalaFutures {
@@ -13,9 +15,38 @@ class RateLimiterTest extends FunSuite with Matchers with ScalaFutures {
   implicit override val patienceConfig: PatienceConfig = PatienceConfig(timeout = 60.seconds, interval = 500.millis)
 
   val runtime = Runtime.unsafeFromLayer(ZEnv.live)
-  val rateLimiter: RateLimiter3 = runtime.unsafeRun(RateLimiter3.create)
 
-  test("Test rate limited stuff") {
+  test("Test RateLimiter1") {
+
+    val duration = 100.milliseconds
+
+    val rateLimiter: RateLimiter = runtime.unsafeRun(RateLimiter.create)
+
+    def run(i: Int): ZIO[Clock, Nothing, (Int, Long)] = for {
+      _ <- ZIO.sleep(Duration.fromScala(duration))
+      end <- zio.clock.nanoTime
+    } yield (i, end)
+
+    def check(results: List[(Int, Long)]): Boolean = {
+
+      val timeDiffs: List[(Int, Long, Long)] =
+        compareConsecutiveElements[(Int, Long), (Int, Long, Long)](results.sortBy(_._2).reverse) {
+          case ((i1, t1), (_, t2)) => (i1, t1, (t1 - t2))
+        }.sortBy(_._2)
+
+      timeDiffs.forall{ case (_, _, diff) => diff > duration.toNanos }
+    }
+
+    def rateLimited(i: Int): ZIO[Clock, Nothing, (Int, Long)] =
+      rateLimiter.rateLimit(run(i))
+
+    val task = ZIO.foreachPar((1 to 10).toList)(rateLimited).map(check)
+    runtime.unsafeRun(task)
+  }
+
+  test("Test RateLimiter3") {
+
+    val rateLimiter: RateLimiter3 = runtime.unsafeRun(RateLimiter3.create)
 
     def runInt(i: Int): (Long, Int) = {
       println(s"Running: $i")
@@ -45,6 +76,15 @@ class RateLimiterTest extends FunSuite with Matchers with ScalaFutures {
 
     val result: List[(Long, Int)] = runtime.unsafeRun(task)
     println(normaliseTime(result))
+  }
+
+  def compareConsecutiveElements[A, B](as: List[A])(f: (A, A) => B): List[B] = {
+    @tailrec
+    def run(remaining: List[A], acc: List[B]): List[B] = remaining match {
+      case a1 :: a2 :: t => run(a2 :: t, acc :+ f(a1, a2))
+      case _ => acc
+    }
+    run(as, Nil)
   }
 
   def normaliseTime(r: List[(Long, Int)]): List[(Long, Int)] = {
