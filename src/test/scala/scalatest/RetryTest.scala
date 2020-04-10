@@ -1,19 +1,22 @@
 package scalatest
 
+import scala.annotation.tailrec
+
 import org.scalatest.{Canceled, Failed, FunSuite, Matchers, Outcome, Retries}
 import RetryTest._
 import org.scalatest.tagobjects.Retryable
 
 class RetryTest extends FunSuite with Matchers with Retries {
 
-  private val retries = 5
   private val helloFunction = new FunctionThatFailsForFirstNIterations(2)
 
-  override def withFixture(test: NoArgTest): Outcome = {
-    if (isRetryable(test)) retry(test, retries) else super.withFixture(test)
-  }
+  private val retries = 5
 
-  def retry(test: NoArgTest, count: Int): Outcome = super.withFixture(test) match {
+  override def withFixture(test: NoArgTest): Outcome =
+    if (isRetryable(test)) retry(test, retries) else super.withFixture(test)
+
+  @tailrec
+  private def retry(test: NoArgTest, count: Int): Outcome = super.withFixture(test) match {
     case Failed(_) | Canceled(_) => if (count == 1) super.withFixture(test) else retry(test, count - 1)
     case outcome => outcome
   }
