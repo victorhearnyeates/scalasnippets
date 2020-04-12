@@ -17,7 +17,7 @@ import zio.stream._
 
 class AkkaToZIOStreamTest extends FunSuite with Matchers {
 
-  val runtime = Runtime.unsafeFromLayer(ZEnv.live, Platform.default)
+  val runtime = Runtime.default
   implicit val system: ActorSystem = ActorSystem("AkkaToZIOStreamTest")
   val numbers: List[Int] = (1 to 10).toList
 

@@ -6,7 +6,7 @@ import zio.stream._
 
 class ZIOStreamTest extends FunSuite with Matchers {
 
-  val runtime = Runtime.unsafeFromLayer(ZEnv.live, Platform.default)
+  val runtime = Runtime.default
 
   def addOne(i: Int): UIO[Int] = ZIO.succeed {
     Thread.sleep(i * 500)

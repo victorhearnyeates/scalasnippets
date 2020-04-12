@@ -7,7 +7,7 @@ import zio.interop.catz._
 
 class ZIOCatsTest extends FunSuite with Matchers {
 
-  val runtime = Runtime.unsafeFromLayer(ZEnv.live, Platform.default)
+  val runtime = Runtime.default
 
   test("Traverse") {
     def task(i: Int): Task[Int] = Task.succeed(i)

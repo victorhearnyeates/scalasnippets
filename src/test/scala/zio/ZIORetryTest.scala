@@ -12,7 +12,7 @@ class ZIORetryTest extends FunSuite with Matchers {
 
   import ZIORetryTest._
 
-  val runtime = Runtime.unsafeFromLayer(ZEnv.live, Platform.default)
+  val runtime = Runtime.default
 
   ignore("Task retry test") {
 

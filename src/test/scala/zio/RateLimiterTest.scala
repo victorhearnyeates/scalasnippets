@@ -14,7 +14,7 @@ class RateLimiterTest extends FunSuite with Matchers with ScalaFutures {
 
   implicit override val patienceConfig: PatienceConfig = PatienceConfig(timeout = 60.seconds, interval = 500.millis)
 
-  val runtime = Runtime.unsafeFromLayer(ZEnv.live)
+  val runtime = Runtime.default
 
   test("Test RateLimiter1") {
 
