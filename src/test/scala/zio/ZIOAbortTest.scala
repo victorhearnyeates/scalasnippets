@@ -17,7 +17,7 @@ import zio.internal.Platform
 class ZIOAbortTest extends FunSuite with Matchers with ScalaFutures {
 
   implicit override val patienceConfig: PatienceConfig = PatienceConfig(timeout = 20.seconds, interval = 200.millis)
-  val runtime = Runtime.unsafeFromLayer(ZEnv.live, Platform.default)
+  val runtime = Runtime.default
 
   test("Running a program with abort") {
 

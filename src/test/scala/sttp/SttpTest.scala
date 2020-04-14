@@ -17,7 +17,7 @@ class SttpTest extends FunSuite with Matchers with EitherValues {
 
   // https://github.com/loicdescotte/scalaIO-streaming-examples/blob/master/src/main/scala/zio/ZioCirce.scala
 
-  val runtime = Runtime.unsafeFromLayer(ZEnv.live, Platform.default)
+  val runtime = Runtime.default
   implicit val sttpBackend = runtime.unsafeRun(AsyncHttpClientZioBackend())
   implicit val sttpBackend2 = runtime.unsafeRun(AsyncHttpClientZioStreamsBackend())
 
